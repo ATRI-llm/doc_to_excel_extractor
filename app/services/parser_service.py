@@ -59,9 +59,8 @@ class ParserService:
         elif file_path.endswith(".docx"):
             return ParserService.parse_docx(file_path)
 
-        elif file_path.endswith(".xlsx"):
+        elif file_path.endswith((".xlsx", ".xls", ".csv")):
             return ParserService.parse_excel(file_path)
-
         elif file_path.endswith(
             (".jpg", ".jpeg", ".png")
         ):
