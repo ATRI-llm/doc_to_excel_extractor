@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DocuExcel - AI Document Data Extractor</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom Style -->
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="background-glow">
+        <div class="glow-orb orb-1"></div>
+        <div class="glow-orb orb-2"></div>
+        <div class="glow-orb orb-3"></div>
+    </div>
+
+    <div class="app-container">
+        <!-- Header -->
+        <header class="app-header animate-fade-in">
+            <div class="logo-area">
+                <div class="logo-icon">
+                    <i class="fa-solid fa-file-invoice-dollar"></i>
+                </div>
+                <div>
+                    <h1>DocuExcel <span class="badge">AI-Powered</span></h1>
+                    <p class="subtitle">Extract unstructured documents into flat Excel sheets in seconds</p>
+                </div>
+            </div>
+            <div class="server-status" id="server-status">
+                <span class="status-dot green"></span>
+                <span class="status-text">Connected</span>
+            </div>
+        </header>
+
+        <!-- Main Workspace -->
+        <main class="workspace-grid">
+            
+            <!-- Left Side: Upload & Parser Status -->
+            <section class="workspace-card upload-section animate-slide-up" style="animation-delay: 0.1s;">
+                <h2 class="card-title"><i class="fa-solid fa-cloud-arrow-up"></i> Upload Document</h2>
+                <p class="card-desc">Supported formats: PDF, DOCX, CSV, XLSX, XLS, JPG, PNG</p>
+                
+                <!-- Drag and Drop Area -->
+                <div class="upload-dropzone" id="dropzone">
+                    <input type="file" id="file-input" class="file-input" accept=".pdf,.docx,.xlsx,.xls,.csv,.jpg,.jpeg,.png">
+                    <div class="dropzone-content">
+                        <div class="icon-pulse">
+                            <i class="fa-solid fa-file-shield"></i>
+                        </div>
+                        <h3>Drag & drop your document here</h3>
+                        <p>or click to browse files</p>
+                        <span class="file-limits">Max size: 10MB</span>
+                    </div>
+                </div>
+
+                <!-- Active Upload / Parsing Details -->
+                <div class="upload-progress-container hidden" id="progress-container">
+                    <div class="progress-info">
+                        <span class="filename" id="upload-filename">invoice_2026.pdf</span>
+                        <span class="percentage" id="progress-percentage">45%</span>
+                    </div>
+                    <div class="progress-bar-bg">
+                        <div class="progress-bar-fill" id="progress-bar" style="width: 45%;"></div>
+                    </div>
+                    <div class="status-msg" id="status-msg">
+                        <i class="fa-solid fa-spinner fa-spin"></i> Parsing document structure...
+                    </div>
+                </div>
+
+                <!-- Latest Parsing Result Details -->
+                <div class="extraction-result-panel hidden" id="latest-result-panel">
+                    <div class="result-header">
+                        <h3><i class="fa-solid fa-circle-check text-success"></i> Extraction Complete</h3>
+                        <span class="doc-badge" id="res-doc-type">Invoice</span>
+                    </div>
+                    
+                    <div class="summary-box">
+                        <h4 class="section-label">Summary</h4>
+                        <p id="res-summary">No data extracted yet.</p>
+                    </div>
+
+                    <div class="entities-box">
+                        <h4 class="section-label">Extracted Metadata (Entities)</h4>
+                        <div class="metadata-grid" id="res-entities">
+                            <!-- Populated dynamically -->
+                        </div>
+                    </div>
+
+                    <div class="double-col">
+                        <div class="list-box">
+                            <h4 class="section-label">Dates Found</h4>
+                            <ul class="badge-list" id="res-dates">
+                                <!-- Populated dynamically -->
+                            </ul>
+                        </div>
+                        <div class="list-box">
+                            <h4 class="section-label">Numbers Found</h4>
+                            <ul class="badge-list" id="res-numbers">
+                                <!-- Populated dynamically -->
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Right Side: Excel Data Table View -->
+            <section class="workspace-card table-section animate-slide-up" style="animation-delay: 0.2s;">
+                <div class="table-header">
+                    <div class="title-group">
+                        <h2 class="card-title"><i class="fa-solid fa-table"></i> Excel Worksheet Preview</h2>
+                        <p class="card-desc">Active file: <span class="file-path">outputs/extracted_data.xlsx</span></p>
+                    </div>
+                    <div class="actions-group">
+                        <button class="btn btn-outline" id="btn-clear" title="Clear all rows and reset spreadsheet">
+                            <i class="fa-solid fa-trash-can"></i> Clear Data
+                        </button>
+                        <button class="btn btn-primary" id="btn-download" title="Download Excel spreadsheet">
+                            <i class="fa-solid fa-file-excel"></i> Download Excel
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Excel Data Table -->
+                <div class="table-scroll-container">
+                    <table class="excel-table" id="excel-data-table">
+                        <thead>
+                            <tr id="table-headers">
+                                <th>Filename</th>
+                                <th>Document Type</th>
+                                <th>Summary</th>
+                                <th>Important Dates</th>
+                                <th>Important Numbers</th>
+                            </tr>
+                        </thead>
+                        <tbody id="table-body">
+                            <tr>
+                                <td colspan="5" class="empty-state">
+                                    <div class="empty-state-icon">
+                                        <i class="fa-solid fa-folder-open"></i>
+                                    </div>
+                                    <h3>No records found</h3>
+                                    <p>Upload a document on the left to start extracting and building your Excel sheet.</p>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="table-footer">
+                    <span class="rows-count" id="rows-count">0 records</span>
+                    <span class="auto-save"><i class="fa-solid fa-floppy-disk"></i> Changes auto-saved</span>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <!-- Notification Toast -->
+    <div class="toast-container" id="toast-container"></div>
+
+    <!-- Custom Script -->
+    <script src="/static/app.js"></script>
+</body>
+</html>
