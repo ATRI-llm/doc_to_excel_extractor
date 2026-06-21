@@ -39,8 +39,8 @@ body {
     background-color: var(--bg-primary);
     color: var(--text-primary);
     font-family: var(--font-sans);
-    min-height: 100vh;
-    overflow-x: hidden;
+    height: 100vh;
+    overflow-x: auto;
     position: relative;
 }
 
@@ -104,10 +104,10 @@ body {
 .app-container {
     max-width: 1600px;
     margin: 0 auto;
-    padding: 2rem;
+    padding: 1.5rem;
     display: flex;
     flex-direction: column;
-    min-height: 100vh;
+    height: calc(100vh - 3rem);
 }
 
 /* Header Styling */
@@ -201,6 +201,8 @@ body {
     gap: 2rem;
     flex-grow: 1;
     align-items: stretch;
+    height: 100%;
+    overflow: visible;
 }
 
 @media (max-width: 1200px) {
@@ -216,7 +218,7 @@ body {
     -webkit-backdrop-filter: blur(20px);
     border: 1px solid var(--border-color);
     border-radius: 24px;
-    padding: 2rem;
+    padding: 1.5rem;
     display: flex;
     flex-direction: column;
     box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
@@ -484,13 +486,41 @@ body {
     border-radius: 6px;
 }
 
-/* Excel View Header Actions */
 .table-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 1.5rem;
     gap: 1rem;
+}
+
+.table-section {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow: visible;
+}
+
+.table-scroll-container {
+    flex: 1 1 auto;
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
+    padding: 0.5rem;
+    box-sizing: border-box;
+}
+
+.table-header {
+    position: sticky;
+    top: 0.6rem;
+    background: linear-gradient(180deg, rgba(10,10,20,0.6), rgba(10,10,20,0.2));
+    backdrop-filter: blur(6px);
+    z-index: 40;
+    padding-top: 0.25rem;
+}
+
+.table-header .actions-group {
+    position: relative;
+    z-index: 50;
 }
 
 .title-group {
@@ -508,7 +538,6 @@ body {
     gap: 0.8rem;
 }
 
-/* Buttons */
 .btn {
     display: inline-flex;
     align-items: center;
@@ -546,7 +575,6 @@ body {
     border-color: rgba(255, 255, 255, 0.2);
 }
 
-/* Excel Preview Table */
 .table-scroll-container {
     flex-grow: 1;
     overflow: auto;
@@ -597,7 +625,6 @@ body {
     background-color: rgba(255, 255, 255, 0.02);
 }
 
-/* Empty States */
 .empty-state {
     text-align: center;
     padding: 5rem 2rem !important;
@@ -622,7 +649,6 @@ body {
     margin: 0 auto;
 }
 
-/* Table Footer */
 .table-footer {
     display: flex;
     justify-content: space-between;
@@ -641,7 +667,6 @@ body {
     gap: 0.3rem;
 }
 
-/* Toast Notification styling */
 .toast-container {
     position: fixed;
     bottom: 2rem;
